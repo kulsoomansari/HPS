@@ -1,0 +1,27 @@
+h2{
+  text-align: center !important;
+  font-size: 40px !important;
+  font-family: 'Times New Roman', Times, serif !important;
+}
+.arrow{
+ color: black;
+ background-color: rgb(228, 216, 216);
+  height: 50px !important;
+   width: 50% !important;
+   margin: 0 auto !important;
+}
+.arrow:hover{
+ color: blue;
+}
+.overflow{
+  overflow-x: hidden;
+}
+.row1, .row2, .row3{
+  margin: 8px 0px !important;
+}
+.contact, .reffer, .staff{
+  margin-bottom: 15px;
+}
+.row4{
+  padding: 10px;
+}
