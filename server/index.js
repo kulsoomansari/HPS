@@ -3,6 +3,8 @@ const express = require("express");
 var cors = require('cors')
 const bodyParser = require('body-parser');
 
+const routes = require('./routes/Api.js')
+
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,4 +16,4 @@ dbConnect();
 app.listen(PORT, (req, res)=>{
 console.log("server is running at", PORT)
 })
-
+app.use('/Api', routes)
