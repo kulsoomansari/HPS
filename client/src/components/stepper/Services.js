@@ -42,18 +42,18 @@ const GreenCheckbox = withStyles({
   })((props) => <Checkbox color="default" {...props} />);
 function Services({handleNext, handleBack, handleClose, step}) {
     const classes = useStyles();
-    // const [Header, setHeader] = useState({
-    //     TokenNo: "",
-    //     ServiceDate: new Date(),
-    //     MRNo: recID,
-    //     Ward: "",
-    //     Amount: "",
-    //     TotalAmount: "",
-    //     PatientContribution: "",
-    //     Remarks: "",
-    //     CreatedUser: "Admin",
-    //     ModifyUser: "Admin"
-    // })
+    const [Header, setHeader] = useState({
+        TokenNo: "",
+        ServiceDate: new Date(),
+        // MRNo: recID,
+        Ward: "",
+        Amount: "",
+        TotalAmount: "",
+        PatientContribution: "",
+        Remarks: "",
+        CreatedUser: "Admin",
+        ModifyUser: "Admin"
+    })
     const [gender, setGender] = useState('');
     const [state, setState] = useState({
         checkedA: false,
@@ -67,9 +67,16 @@ function Services({handleNext, handleBack, handleClose, step}) {
     const handleChecked = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
       }; 
+      const handleSubmit = () => {
+        console.log("form has submitted")
+        let payload = {
+            Header,
+        };
+        console.log(payload)
+    }
     return (
         <>
-        <GlobalHeader handleNext={handleNext} handleClose={handleClose} handleBack={handleBack} step={step}/>
+        <GlobalHeader handleSubmit={handleSubmit} handleClose={handleClose} handleBack={handleBack} step={step}/>
         <div className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={3}>

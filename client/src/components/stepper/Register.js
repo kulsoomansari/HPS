@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import { common, green } from '@material-ui/core/colors';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NumberFormat from 'react-number-format';
@@ -64,6 +64,8 @@ const GreenCheckbox = withStyles({
     },
     checked: {},
 })((props) => <Checkbox color="default" {...props} />);
+
+
 function Services({ handleNext, handleBack }) {
     const classes = useStyles();
     const [Header, setHeader] = useState({
@@ -72,7 +74,8 @@ function Services({ handleNext, handleBack }) {
         RegistrationDate: new Date(),
         Name: "",
         FatherOrHusband: "",
-        DOB: new Date(),
+        // DOB: new Date(),
+        DOB: "",
         Age: "",
         Gender: "",
         Religion: "",
@@ -95,10 +98,10 @@ function Services({ handleNext, handleBack }) {
         NOY: "",
         EmpID: "",
         IsStaff: false,
-        CreateUser: "",
-        ModifyUser: "",
-        CreateDate: "",
-        ModifyDate: ""
+        CreateUser: "Admin",
+        ModifyUser: "Admin",
+        CreateDate: new Date,
+        ModifyDate: new Date
     });
     const [gender, setGender] = useState('');
     const [religion, setReligion] = useState('');
@@ -121,10 +124,19 @@ function Services({ handleNext, handleBack }) {
     const handleChecked = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
+    const handleSubmit = () => {
+        let payload ={
+            Header,
+        }
+        console.log(payload)
+        // axios
+
+        handleNext();
+    }
     return (
         <>
             <h2>Registration</h2>
-            <GlobalHeader handleNext={handleNext} handleBack={handleBack} />
+            <GlobalHeader handleSubmit={handleSubmit} handleBack={handleBack} />
             <div className={classes.root} className="overflow">
                 <Grid container spacing={3} className="row1">
                     <Grid item xs={3}>
@@ -446,25 +458,19 @@ function Services({ handleNext, handleBack }) {
                     <legend>Staff</legend>
                     <Grid container className="row4">
                         <FormGroup row>
-                            <FormControlLabel
-                                control={<Checkbox checked={state.checkedA}
-                                    onChange={handleChecked, (e) => setHeader({ ...Header, IsPAFEmp: e.target.value })}
-                                    name="checkedA"
-                                />}
-                                label="Is PAF employee"
+                        <FormControlLabel control={<Checkbox name="checkedC" />} label="Is PAF employee"
+                        id="IsPAFEmp"
+                        value={Header.IsPAFEmp}
+                                onChange={(e) => setHeader({ ...Header, IsPAFEmp: e.target.value })}
                             />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={state.checkedB}
-                                        onChange={handleChecked, (e) => setHeader({ ...Header, IsRejected: e.target.value })}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label="Is Rejected"
+                            <FormControlLabel control={<Checkbox name="checkedC" />} label="Is Rejected"
+                            id="IsRejected"
+                            value={Header.IsRejected}
+                                onChange={(e) => setHeader({ ...Header, IsRejected: e.target.value })}
                             />
                             <FormControlLabel control={<Checkbox name="checkedC" />} label="Is staff"
+                            id="IsStaff"
+                            value={Header.IsStaff}
                                 onChange={(e) => setHeader({ ...Header, IsStaff: e.target.value })}
                             />
                         </FormGroup>

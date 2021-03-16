@@ -71,18 +71,18 @@ function Welfare({ handleNext, handleBack }) {
             }
         ], rows: []
     })
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
         console.log("form has submitted")
-        e.preventDefault();
         let payload = {
             Header,
             ItemTable
         };
         console.log(payload)
+        handleNext();
     }
     return (
         <>
-            <GlobalHeader handleNext={handleNext} handleBack={handleBack} />
+            <GlobalHeader handleSubmit={handleSubmit} handleBack={handleBack} />
             <form onSubmit={handleSubmit}>
                 <div className={classes.root}>
                     <Grid container spacing={3}>
