@@ -100,5 +100,16 @@ payload =======
 "Detail":[
 {"TestDesc":"thyroid","TestCode":"001","TestRate":"1"}]
 }
+
+
+
 =========================MONGODB DATA TYPES============================
 https://www.tutorialspoint.com/mongodb/mongodb_datatype.htm
+
+
+
+
+================================FINAL PAPER=============================
+https://docs.google.com/document/d/1yE78HXydZA4s39nQLG42kKqFZT-Tau8u7S2sD4x-avY/edit?usp=sharing
+
+

@@ -3,7 +3,10 @@ const express = require("express");
 var cors = require('cors')
 const bodyParser = require('body-parser');
 
-const routes = require('./routes/Api.js')
+const RegisterRoute = require('./routes/api/Register.js')
+const ServicesRoute = require('./routes/api/Services.js')
+const WelfareRoute = require('./routes/api/Welfare.js')
+
 
 const app = express()
 app.use(cors())
@@ -16,4 +19,7 @@ dbConnect();
 app.listen(PORT, (req, res)=>{
 console.log("server is running at", PORT)
 })
-app.use('/Api', routes)
+app.use('/api/Register', RegisterRoute)
+app.use('/api/Services', ServicesRoute)
+app.use('/api/Welfare', WelfareRoute)
+

@@ -78,7 +78,8 @@ function Services({handleNext, handleBack, handleClose, step}) {
         <>
         <GlobalHeader handleSubmit={handleSubmit} handleClose={handleClose} handleBack={handleBack} step={step}/>
         <div className={classes.root}>
-            <Grid container spacing={3}>
+            <fieldset>
+             <Grid container spacing={3}>
                 <Grid item xs={3}>
                     <TextField
                         // label="Size"
@@ -98,24 +99,38 @@ function Services({handleNext, handleBack, handleClose, step}) {
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField
-                        label="Registration date"
-                        id="outlined-size-small"
-                        placeholder="01-2-2021"
+                <TextField
+                        id="textfield"
+                        select
+                        label="Gender"
+                        placeholder={gender}
+                        value={gender}
+                        onChange={handleChange}
                         variant="outlined"
                         size="small"
-                    />
+                        SelectProps={{
+                            native: true,
+                        }}
+                    >
+                        {Gender.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </TextField>
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField
-                        // label="Size"
-                        id="outlined-size-small"
-                        placeholder="Name"
-                        variant="outlined"
-                        size="small"
-                    />
+                <TextField
+                                label="Date"
+                                id=""
+                                onChange={(e) => setHeader({ ...Header, WelfareDate: e.target.value })}
+                                variant="outlined"
+                                size="small"
+                            />
                 </Grid>
-            </Grid>
+            </Grid>   
+            </fieldset>
+            
             <Grid container spacing={3}>
                 <Grid item xs={3}>
                     <TextField
