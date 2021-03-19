@@ -1,7 +1,7 @@
-const dbConnect = require("./config/db");
 const express = require("express");
 var cors = require('cors')
 const bodyParser = require('body-parser');
+const dbConnect = require("./config/db");
 
 const RegisterRoute = require('./routes/api/Register.js')
 const ServicesRoute = require('./routes/api/Services.js')
@@ -20,6 +20,6 @@ app.listen(PORT, (req, res)=>{
 console.log("server is running at", PORT)
 })
 app.use('/api/Register', RegisterRoute)
-app.use('/api/Services', ServicesRoute)
-app.use('/api/Welfare', WelfareRoute)
+// app.use('/api/Services', ServicesRoute)
+// app.use('/api/Welfare', WelfareRoute)
 

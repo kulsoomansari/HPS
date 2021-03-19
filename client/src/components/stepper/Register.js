@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NumberFormat from 'react-number-format';
 import Checkbox from '@material-ui/core/Checkbox';
 import GlobalHeader from './Header';
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -121,17 +122,13 @@ function Services({ handleNext, handleBack }) {
     const handleHelp = (event) => {
         setHelp(event.target.value);
     };
-    const handleChecked = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-    };
     const handleSubmit = () => {
+        // const reg = await axios.post('http:localhost:4000/api/Register/add',Header)
         let payload ={
             Header,
         }
         console.log(payload)
-        // axios
-
-        handleNext();
+       handleNext();
     }
     return (
         <>
@@ -143,8 +140,9 @@ function Services({ handleNext, handleBack }) {
                         <TextField
                             // label="Size"
                             fullWidth
-                            id="outlined-size-small"
+                            id="MRNo"
                             placeholder="MR #"
+                            onChange={(e) => setHeader({ ...Header, MRNo: Number(e.target.value) })}
                             variant="outlined"
                             value={Header.MRNo}
                             size="small"
@@ -154,7 +152,8 @@ function Services({ handleNext, handleBack }) {
                         <TextField
                             // label="Size"
                             fullWidth
-                            id="outlined-size-small"
+                            id="TokenNo"
+                            onChange={(e) => setHeader({ ...Header, TokenNo: Number(e.target.value) })}
                             placeholder="Token no"
                             variant="outlined"
                             size="small"
@@ -164,7 +163,7 @@ function Services({ handleNext, handleBack }) {
                         <TextField
                             fullWidth
                             label="Registration date"
-                            id="outlined-size-small"
+                            id="RegistrationDate"
                             placeholder="01-2-2021"
                             onChange={(e) => setHeader({ ...Header, RegistrationDate: e.target.value })}
                             variant="outlined"
@@ -211,8 +210,7 @@ function Services({ handleNext, handleBack }) {
                             // label="Size"
                             fullWidth
                             id="outlined-size-small"
-                            defaultValue="Age"
-                            onChange={(e) => setHeader({ ...Header, Age: e.target.value })}
+                            onChange={(e) => setHeader({ ...Header, Age: Number(e.target.value) })}
                             variant="outlined"
                             size="small"
                         />
@@ -271,7 +269,7 @@ function Services({ handleNext, handleBack }) {
                             label="HelpType"
                             placeholder={help}
                             value={help}
-                            onChange={handleHelp, (e) => setHeader({ ...Header, Age: e.target.value })}
+                            onChange={handleHelp, (e) => setHeader({ ...Header, HelpType: e.target.value })}
                             variant="outlined"
                             size="small"
                             SelectProps={{
@@ -303,7 +301,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="HousNo"
                                 placeholder="House no"
                                 onChange={(e) => setHeader({ ...Header, HousNo: e.target.value })}
                                 variant="outlined"
@@ -313,7 +311,7 @@ function Services({ handleNext, handleBack }) {
                         <Grid item sm={3}>
                             <TextField
                                 // label="Size"
-                                id="outlined-size-small"
+                                id="Address"
                                 fullWidth
                                 placeholder="Address"
                                 onChange={(e) => setHeader({ ...Header, Address: e.target.value })}
@@ -323,7 +321,7 @@ function Services({ handleNext, handleBack }) {
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
-                                id="outlined-size-small"
+                                id="Area"
                                 fullWidth
                                 placeholder="Area"
                                 onChange={(e) => setHeader({ ...Header, Area: e.target.value })}
@@ -335,7 +333,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="District"
                                 placeholder="District"
                                 onChange={(e) => setHeader({ ...Header, District: e.target.value })}
                                 variant="outlined"
@@ -348,7 +346,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 fullWidth
                                 // label="Size"
-                                id="outlined-size-small"
+                                id="City"
                                 placeholder="City"
                                 onChange={(e) => setHeader({ ...Header, City: e.target.value })}
                                 variant="outlined"
@@ -359,7 +357,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="Phone"
                                 placeholder="Phone 1"
                                 onChange={(e) => setHeader({ ...Header, Phone: e.target.value })}
                                 variant="outlined"
@@ -380,7 +378,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="Mobile"
                                 placeholder="Mobile"
                                 onChange={(e) => setHeader({ ...Header, Mobile: e.target.value })}
                                 variant="outlined"
@@ -393,7 +391,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="MonthlyConsLimit"
                                 label="monthly consumtion limit"
                                 onChange={(e) => setHeader({ ...Header, MonthlyConsLimit: e.target.value })}
                                 placeholder="0"
@@ -410,7 +408,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="RefBy"
                                 placeholder="Referred By"
                                 onChange={(e) => setHeader({ ...Header, RefBy: e.target.value })}
                                 variant="outlined"
@@ -421,7 +419,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="EmpID"
                                 placeholder="Employe Id"
                                 onChange={(e) => setHeader({ ...Header, EmpID: e.target.value })}
                                 variant="outlined"
@@ -432,7 +430,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="NOY"
                                 placeholder="NOY"
                                 onChange={(e) => setHeader({ ...Header, NOY: e.target.value })}
                                 variant="outlined"
@@ -445,7 +443,7 @@ function Services({ handleNext, handleBack }) {
                             <TextField
                                 // label="Size"
                                 fullWidth
-                                id="outlined-size-small"
+                                id="Remarks"
                                 placeholder="Remarks"
                                 onChange={(e) => setHeader({ ...Header, Remarks: e.target.value })}
                                 variant="outlined"

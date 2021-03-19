@@ -25,7 +25,7 @@ const registerSchema = new mongoose.Schema({
         required: true
     },
     Age: {
-        type: Number,
+        type: String,
         required: true
     },
     Gender: {
@@ -123,5 +123,5 @@ const registerSchema = new mongoose.Schema({
         default: new Date
     },
 })
-const Registration = new mongoose.model("Regisration", registerSchema)
-module.exports = Registration
+const Reg =  mongoose.model("Reg", registerSchema)
+module.exports = Reg
