@@ -20,12 +20,16 @@ router.post("/add", async (req, res) => {
     try {
         const register = await Reg.create(req.body)
         res.json({
-            status: 200, success: true,
-             id: register._id, msg:"record created"
+            status: 200, 
+            success: true,
+             dbid: register._id, 
+             msg:"record created"
         })
-    } catch {
+    } catch(error){
         res.json({
-            status: 400, success: false
+            status: 400, 
+            success: false,
+            error
         })
     }
 })

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField } from '@material-ui/core'
+import { Button, FormControl, TextField } from '@material-ui/core'
 import clsx from 'clsx';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -10,6 +10,18 @@ import GlobalHeader from './Header';
 import MaterialTable from 'material-table';
 import NumberFormat from 'react-number-format';
 import { tableIcons } from '../tableIcons';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import axios from 'axios'
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,56 +83,92 @@ function Welfare({ handleNext, handleBack }) {
             }
         ], rows: []
     })
+    const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
     const handleSubmit = () => {
-        console.log("form has submitted")
         let payload = {
             Header,
             ItemTable
         };
         console.log(payload)
-        handleNext();
-    }
+        axios.post("http://localhost:4000/api/Welfare/add", Header)
+        .then(res => {
+            console.log(res.data)
+            handleNext();
+        })
+        .catch(err => console.log('error', err))    }
+
     return (
         <>
             <GlobalHeader handleSubmit={handleSubmit} handleBack={handleBack} />
             <form onSubmit={handleSubmit}>
                 <div className={classes.root}>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} className="row1">
                         <Grid item xs={3}>
-                            <TextField
-                                label="MR #"
-                                id="outlined-size-small"
+                            <NumberFormat allowLeadingZeros={true}
+                                format="#####"
+                                customInput={TextField}
+                                fullWidth
+                                id="MRNo"
+                                placeholder="MR #"
+                                label="MR no"
+                                onChange={(e) => setHeader({ ...Header, MRNo: (e.target.value) })}
                                 variant="outlined"
-                                size="small"
+                                value={Header.MRNo}
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <TextField
-                                label="Token no"
+                            <NumberFormat allowLeadingZeros={true}
+                                format="###"
+                                customInput={TextField}
+                                fullWidth
                                 id="TokenNo"
+                                onChange={(e) => setHeader({ ...Header, TokenNo: (e.target.value) })}
+                                placeholder="Token no"
+                                label="Token no"
                                 value={Header.TokenNo}
-                                onChange={(e) => setHeader({ ...Header, TokenNo: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <Grid item xs={3}>
+                                <KeyboardDatePicker
+                                    margin="normal"
+                                    id="WelfareDate"
+                                    label="Welfare date"
+                                    format="MM/dd/yyyy"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </Grid>
+                        </MuiPickersUtilsProvider>
                         <Grid item xs={3}>
-                            <TextField
-                                label="Welfare date"
-                                id="WelfareDate"
-                                value={Header.WelfareDate}
-                                onChange={(e) => setHeader({ ...Header, WelfareDate: e.target.value })}
-                                variant="outlined"
-                                size="small"
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            {/* radio button */}
+                            <RadioGroup row aria-label="position" name="position" defaultValue="top">
+                                <FormControlLabel
+                                    value="zakat"
+                                    control={<Radio color="primary" />}
+                                    label="Zakat"
+                                    labelPlacement="start"
+                                />
+                                <FormControlLabel
+                                    value="Donation"
+                                    control={<Radio color="primary" />}
+                                    label="Donation"
+                                    labelPlacement="start"
+                                />
+                            </RadioGroup>
                         </Grid>
                     </Grid>
                     <fieldset>
                         <legend>Contact</legend>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} className="row2">
                             <Grid item xs={3}>
                                 <TextField
                                     label="Profession"
@@ -128,7 +176,7 @@ function Welfare({ handleNext, handleBack }) {
                                     onChange={(e) => setHeader({ ...Header, Profession: e.target.value })}
                                     value={Header.Profession}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -138,7 +186,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.Education}
                                     onChange={(e) => setHeader({ ...Header, Education: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -148,7 +196,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.Fiqa}
                                     onChange={(e) => setHeader({ ...Header, Fiqa: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -158,14 +206,14 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.Cast}
                                     onChange={(e) => setHeader({ ...Header, Cast: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                         </Grid>
                     </fieldset>
                     <fieldset>
                         <legend>Requester Info</legend>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={1} className="row3">
                             <Grid item xs={3}>
                                 <TextField
                                     label="Requester name"
@@ -173,7 +221,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.ReqName}
                                     onChange={(e) => setHeader({ ...Header, ReqName: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -183,7 +231,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.ReqPhone}
                                     onChange={(e) => setHeader({ ...Header, ReqPhone: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -193,7 +241,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.ReqRelationWithPatient}
                                     onChange={(e) => setHeader({ ...Header, ReqRelationWithPatient: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -203,11 +251,11 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.NoOfKids}
                                     onChange={(e) => setHeader({ ...Header, NoOfKids: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                         </Grid>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={1} className="row3">
                             <Grid item xs={3}>
                                 <TextField
                                     label="Guardian"
@@ -215,7 +263,7 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.Guardian}
                                     onChange={(e) => setHeader({ ...Header, Guardian: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -226,7 +274,7 @@ function Welfare({ handleNext, handleBack }) {
                                     onChange={(e) => setHeader({ ...Header, MonthlyIncome: e.target.value })}
                                     defaultValue="0"
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -236,11 +284,11 @@ function Welfare({ handleNext, handleBack }) {
                                     value={Header.NoOFFamilyMembers}
                                     onChange={(e) => setHeader({ ...Header, NoOFFamilyMembers: e.target.value })}
                                     variant="outlined"
-                                    size="small"
+                                    fullWidth
                                 />
                             </Grid>
                         </Grid>
-                        <Grid container>
+                        <Grid container spacing={1} className="row3">
                             <FormGroup row>
                                 <FormControlLabel control={<Checkbox name="checkedC"
                                     id="IsMarried"
@@ -313,7 +361,6 @@ function Welfare({ handleNext, handleBack }) {
                             }),
                     }}
                 />
-                <Button type="submit">Submit</Button>
             </form>
 
         </>

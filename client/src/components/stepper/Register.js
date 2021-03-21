@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-import { common, green } from '@material-ui/core/colors';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NumberFormat from 'react-number-format';
 import Checkbox from '@material-ui/core/Checkbox';
 import GlobalHeader from './Header';
 import axios from 'axios'
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,9 +25,12 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
 }));
-const formName = "Registration Form";
 //Dropdown  Gender
 const Gender = [
+    {
+        value: '',
+        label: '',
+    },
     {
         value: 'Male',
         label: 'Male',
@@ -36,6 +43,10 @@ const Gender = [
 //Dropdown RELIGION
 const Religion = [
     {
+        value: '',
+        label: '',
+    },
+    {
         value: 'islam',
         label: 'islam',
     },
@@ -47,6 +58,10 @@ const Religion = [
 //Dropdown helptype
 const HelpType = [
     {
+        value: '',
+        label: '',
+    },
+    {
         value: 'zakat',
         label: 'zakat',
     },
@@ -55,19 +70,19 @@ const HelpType = [
         label: 'other',
     },
 ];
-//checkboxes
-const GreenCheckbox = withStyles({
-    root: {
-        color: green[400],
-        '&$checked': {
-            color: green[600],
-        },
-    },
-    checked: {},
-})((props) => <Checkbox color="default" {...props} />);
+// checkboxes
+// const GreenCheckbox = withStyles({
+//     root: {
+//         color: green[400],
+//         '&$checked': {
+//             color: green[600],
+//         },
+//     },
+//     checked: {},
+// })((props) => <Checkbox color="default" {...props} />);
 
 
-function Services({ handleNext, handleBack }) {
+function Register({ handleNext, handleBack }) {
     const classes = useStyles();
     const [Header, setHeader] = useState({
         MRNo: "",
@@ -75,8 +90,7 @@ function Services({ handleNext, handleBack }) {
         RegistrationDate: new Date(),
         Name: "",
         FatherOrHusband: "",
-        // DOB: new Date(),
-        DOB: "",
+        DOB: new Date(),
         Age: "",
         Gender: "",
         Religion: "",
@@ -91,14 +105,14 @@ function Services({ handleNext, handleBack }) {
         Mobile: "",
         RefBy: "",
         Remarks: "",
-        IsRejected: false,
-        IsZakat: false,
-        IsPAFEmp: false,
+        IsRejected: "false",
+        IsZakat: "false",
+        IsPAFEmp: "false",
         MonthlyConsLimit: 0,
         ThumbImage: "",
         NOY: "",
         EmpID: "",
-        IsStaff: false,
+        IsStaff: "false",
         CreateUser: "Admin",
         ModifyUser: "Admin",
         CreateDate: new Date,
@@ -113,6 +127,8 @@ function Services({ handleNext, handleBack }) {
         checkedF: false,
         checkedG: false,
     });
+    const [err, setErr] = useState('')
+    const [open, setOpen] = useState(false)
     const handleChange = (event) => {
         setGender(event.target.value);
     };
@@ -122,14 +138,105 @@ function Services({ handleNext, handleBack }) {
     const handleHelp = (event) => {
         setHelp(event.target.value);
     };
-    const handleSubmit = () => {
-        // const reg = await axios.post('http:localhost:4000/api/Register/add',Header)
-        let payload ={
-            Header,
+    const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+    const validate = () => {
+        if (Header.TokenNo === '' || Header.TokenNo === undefined || Header.TokenNo === null) {
+            setErr('Token is missing')
+            setOpen(true)
+            return false;
         }
-        console.log(payload)
-       handleNext();
+        else if (Header.RegistrationDate === '' || Header.RegistrationDate === undefined || Header.RegistrationDate === null) {
+            setErr('RegistrationDate is missing')
+            return false;
+        }
+        else if (Header.Name === '' || Header.Name === undefined || Header.Name === null) {
+            setErr('Name is missing')
+            return false;
+        }
+        else if (Header.FatherOrHusband === '' || Header.FatherOrHusband === undefined || Header.FatherOrHusband === null) {
+            setErr('FatherOrHusband is missing')
+            return false;
+        }
+        else if (Header.DOB === '' || Header.DOB === undefined || Header.DOB === null) {
+            setErr('Date of Birth is missing')
+            return false;
+        }
+        else if (Header.Age === '' || Header.Age === undefined || Header.Age === null) {
+            setErr('Age is missing')
+            return false;
+        }
+        else if (Header.Gender === '' || Header.Gender === undefined || Header.Gender === null) {
+            setErr('Gender is missing')
+            return false;
+        }
+        else if (Header.Religion === '' || Header.Religion === undefined || Header.Religion === null) {
+            setErr('Religion is missing')
+            return false;
+        }
+        else if (Header.IsZakat === '' || Header.IsZakat === undefined || Header.IsZakat === null) {
+            setErr('Zakaat is missing')
+            return false;
+        }
+        else if (Header.CNIC === '' || Header.CNIC === undefined || Header.CNIC === null) {
+            setErr('CNIC is missing')
+            return false;
+        }
+
+        else if (Header.HousNo === '' || Header.HousNo === undefined || Header.HousNo === null) {
+            setErr('House No is missing')
+            return false;
+        }
+        else if (Header.Address === '' || Header.Address === undefined || Header.Address === null) {
+            setErr('Address is missing')
+            return false;
+        }
+        else if (Header.Area === '' || Header.Area === undefined || Header.Area === null) {
+            setErr('Area is missing')
+            return false;
+        }
+        else if (Header.City === '' || Header.City === undefined || Header.City === null) {
+            setErr('Ciy is missing')
+            return false;
+        }
+
+        else if (Header.Mobile === '' || Header.Mobile === undefined || Header.Mobile === null) {
+            setErr('Mobile is missing')
+            return false;
+        }
+        else if (Header.EmpID === '' || Header.EmpID === undefined || Header.EmpID === null) {
+            setErr('Employee ID is missing')
+            return false;
+        }
+        else if (Header.NOY === '' || Header.Name === undefined || Header.Name === null) {
+            setErr('NOY is missing')
+            return false;
+        }
+        else if (Header.IsPAFEmp === '' || Header.IsPAFEmp === undefined || Header.IsPAFEmp === null) {
+            setErr('PAF Employee is missing')
+            return false;
+        }
+
+        else if (Header.IsRejected === '' || Header.IsRejected === undefined || Header.IsRejected === null) {
+            setErr('Rejection is missing')
+            return false;
+        }
+
+        else {
+            return true;
+        }
     }
+    const handleSubmit = () => {
+            axios.post("http://localhost:4000/api/Register/add", Header)
+                .then(res => {
+                    console.log(res.data)
+                    handleNext();
+                })
+                .catch(err => console.log('error', err))
+        }
     return (
         <>
             <h2>Registration</h2>
@@ -137,48 +244,58 @@ function Services({ handleNext, handleBack }) {
             <div className={classes.root} className="overflow">
                 <Grid container spacing={3} className="row1">
                     <Grid item xs={3}>
-                        <TextField
-                            // label="Size"
+                        <NumberFormat allowLeadingZeros={true}
+                            format="#####"
+                            customInput={TextField}
                             fullWidth
                             id="MRNo"
                             placeholder="MR #"
-                            onChange={(e) => setHeader({ ...Header, MRNo: Number(e.target.value) })}
+                            label="MR no"
+                            onChange={(e) => setHeader({ ...Header, MRNo: (e.target.value) })}
                             variant="outlined"
                             value={Header.MRNo}
-                            size="small"
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <TextField
-                            // label="Size"
+                        <NumberFormat allowLeadingZeros={true}
+                            format="###"
+                            customInput={TextField}
                             fullWidth
                             id="TokenNo"
                             onChange={(e) => setHeader({ ...Header, TokenNo: Number(e.target.value) })}
                             placeholder="Token no"
+                            label="Token no"
+                            value={Header.TokenNo}
                             variant="outlined"
-                            size="small"
                         />
                     </Grid>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid item xs={3}>
+                            <KeyboardDatePicker
+                                disableToolbar
+                                variant="outlined"
+                                format="MM/dd/yyyy"
+                                margin="normal"
+                                id="date-picker-inline"
+                                // value={Header.RegistrationDate}
+                                label="Registration Date"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </Grid>
+                    </MuiPickersUtilsProvider>
                     <Grid item xs={3}>
                         <TextField
-                            fullWidth
-                            label="Registration date"
-                            id="RegistrationDate"
-                            placeholder="01-2-2021"
-                            onChange={(e) => setHeader({ ...Header, RegistrationDate: e.target.value })}
-                            variant="outlined"
-                            size="small"
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <TextField
-                            // label="Size"
                             fullWidth
                             id="Name"
                             placeholder="Name"
+                            label="Name"
+                            value={Header.Name}
                             onChange={(e) => setHeader({ ...Header, Name: e.target.value })}
                             variant="outlined"
-                            size="small"
                         />
                     </Grid>
                 </Grid>
@@ -186,46 +303,50 @@ function Services({ handleNext, handleBack }) {
                     <Grid item xs={3}>
                         <TextField
                             fullWidth
-                            // label="Size"
-                            id="outlined-size-small"
+                            id="FatherOrHusband"
+                            label="Father/Husband name"
+                            value={Header.FatherOrHusband}
                             placeholder="Father Name"
                             onChange={(e) => setHeader({ ...Header, FatherOrHusband: e.target.value })}
                             variant="outlined"
-                            size="small"
                         />
                     </Grid>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid item xs={3}>
+                            <KeyboardDatePicker
+                                margin="normal"
+                                id="DOB"
+                                label="Date of birth"
+                                format="MM/dd/yyyy"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </Grid>
+                    </MuiPickersUtilsProvider>
                     <Grid item xs={3}>
                         <TextField
                             fullWidth
-                            label="Date of birth"
-                            id="outlined-size-small"
-                            placeholder="01-02-2021"
-                            onChange={(e) => setHeader({ ...Header, DOB: e.target.value })}
-                            variant="outlined"
-                            size="small"
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <TextField
-                            // label="Size"
-                            fullWidth
-                            id="outlined-size-small"
+                            label="Age"
+                            id="Age"
+                            type="number"
+                            value={Header.Age}
                             onChange={(e) => setHeader({ ...Header, Age: Number(e.target.value) })}
                             variant="outlined"
-                            size="small"
                         />
+
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
                             fullWidth
-                            id="textfield"
+                            id="Gender"
                             select
                             label="Gender"
-                            placeholder={gender}
-                            value={gender}
+                            value={Header.Gender}
                             onChange={handleChange, (e) => setHeader({ ...Header, Gender: e.target.value })}
                             variant="outlined"
-                            size="small"
                             SelectProps={{
                                 native: true,
                             }}
@@ -241,15 +362,13 @@ function Services({ handleNext, handleBack }) {
                 <Grid container spacing={3} className="row3">
                     <Grid item xs={3}>
                         <TextField
-                            id="textfield"
+                            id="Religion"
                             fullWidth
                             select
                             label="Religion"
-                            placeholder={religion}
-                            value={religion}
+                            value={Header.Religion}
                             onChange={handleReligion, (e) => setHeader({ ...Header, Religion: e.target.value })}
                             variant="outlined"
-                            size="small"
                             SelectProps={{
                                 native: true,
                             }}
@@ -263,15 +382,13 @@ function Services({ handleNext, handleBack }) {
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
-                            id="textfield"
+                            id="HelpType"
                             fullWidth
                             select
                             label="HelpType"
-                            placeholder={help}
-                            value={help}
+                            value={Header.HelpType}
                             onChange={handleHelp, (e) => setHeader({ ...Header, HelpType: e.target.value })}
                             variant="outlined"
-                            size="small"
                             SelectProps={{
                                 native: true,
                             }}
@@ -284,13 +401,16 @@ function Services({ handleNext, handleBack }) {
                         </TextField>
                     </Grid>
                     <Grid item xs={3}>
-                        <TextField
-                            fullWidth
+                        <NumberFormat
+                            format="##### ####### #"
+                            mask="_"
                             label="CNIC"
-                            onChange={(e) => setHeader({ ...Header, CNIC: e.target.value })}
-                            id="outlined-size-small"
+                            id="CNIC"
+                            value={Header.CNIC}
+                            customInput={TextField}
                             variant="outlined"
-                            size="small"
+                            fullWidth
+                            onChange={(e) => setHeader({ ...Header, CNIC: e.target.value })}
                         />
                     </Grid>
                 </Grid>
@@ -299,24 +419,23 @@ function Services({ handleNext, handleBack }) {
                     <Grid container spacing={3} className="row4">
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="HousNo"
                                 placeholder="House no"
+                                value={Header.HousNo}
                                 onChange={(e) => setHeader({ ...Header, HousNo: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 id="Address"
+                                label="Address"
                                 fullWidth
+                                value={Header.Address}
                                 placeholder="Address"
                                 onChange={(e) => setHeader({ ...Header, Address: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
@@ -324,20 +443,21 @@ function Services({ handleNext, handleBack }) {
                                 id="Area"
                                 fullWidth
                                 placeholder="Area"
+                                label="Area"
+                                value={Header.Area}
                                 onChange={(e) => setHeader({ ...Header, Area: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="District"
+                                label="District"
+                                value={Header.District}
                                 placeholder="District"
                                 onChange={(e) => setHeader({ ...Header, District: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                     </Grid>
@@ -345,58 +465,55 @@ function Services({ handleNext, handleBack }) {
                         <Grid item sm={3}>
                             <TextField
                                 fullWidth
-                                // label="Size"
                                 id="City"
                                 placeholder="City"
+                                value={Header.City}
                                 onChange={(e) => setHeader({ ...Header, City: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="Phone"
                                 placeholder="Phone 1"
+                                value={Header.Phone}
                                 onChange={(e) => setHeader({ ...Header, Phone: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
                                 fullWidth
-                                id="outlined-size-small"
+                                id="OffPhone"
+                                value={Header.OffPhone}
                                 placeholder="Phone 2"
                                 onChange={(e) => setHeader({ ...Header, OffPhone: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="Mobile"
+                                value={Header.Mobile}
                                 placeholder="Mobile"
                                 onChange={(e) => setHeader({ ...Header, Mobile: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} className="row4">
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
+                                type="number"
                                 id="MonthlyConsLimit"
+                                value={Header.MonthlyConsLimit}
                                 label="monthly consumtion limit"
                                 onChange={(e) => setHeader({ ...Header, MonthlyConsLimit: e.target.value })}
                                 placeholder="0"
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                     </Grid>
@@ -406,48 +523,44 @@ function Services({ handleNext, handleBack }) {
                     <Grid container spacing={3} className="row4">
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="RefBy"
+                                value={Header.RefBy}
                                 placeholder="Referred By"
                                 onChange={(e) => setHeader({ ...Header, RefBy: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
-                        <Grid item sm={3}>
+                        {/* <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="EmpID"
+                                value={Header.EmpID}
                                 placeholder="Employe Id"
                                 onChange={(e) => setHeader({ ...Header, EmpID: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item sm={3}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="NOY"
+                                value={Header.NOY}
                                 placeholder="NOY"
                                 onChange={(e) => setHeader({ ...Header, NOY: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                     </Grid>
                     <Grid container spacing={3} className="row4">
                         <Grid item sm={6}>
                             <TextField
-                                // label="Size"
                                 fullWidth
                                 id="Remarks"
+                                value={Header.Remarks}
                                 placeholder="Remarks"
                                 onChange={(e) => setHeader({ ...Header, Remarks: e.target.value })}
                                 variant="outlined"
-                                size="small"
                             />
                         </Grid>
                     </Grid>
@@ -456,19 +569,19 @@ function Services({ handleNext, handleBack }) {
                     <legend>Staff</legend>
                     <Grid container className="row4">
                         <FormGroup row>
-                        <FormControlLabel control={<Checkbox name="checkedC" />} label="Is PAF employee"
-                        id="IsPAFEmp"
-                        value={Header.IsPAFEmp}
+                            <FormControlLabel control={<Checkbox name="checkedC" />} label="Is PAF employee"
+                                id="IsPAFEmp"
+                                value={Header.IsPAFEmp}
                                 onChange={(e) => setHeader({ ...Header, IsPAFEmp: e.target.value })}
                             />
                             <FormControlLabel control={<Checkbox name="checkedC" />} label="Is Rejected"
-                            id="IsRejected"
-                            value={Header.IsRejected}
+                                id="IsRejected"
+                                value={Header.IsRejected}
                                 onChange={(e) => setHeader({ ...Header, IsRejected: e.target.value })}
                             />
                             <FormControlLabel control={<Checkbox name="checkedC" />} label="Is staff"
-                            id="IsStaff"
-                            value={Header.IsStaff}
+                                id="IsStaff"
+                                value={Header.IsStaff}
                                 onChange={(e) => setHeader({ ...Header, IsStaff: e.target.value })}
                             />
                         </FormGroup>
@@ -479,4 +592,4 @@ function Services({ handleNext, handleBack }) {
     )
 }
 
-export default Services
+export default Register
