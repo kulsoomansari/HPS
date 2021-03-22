@@ -8,14 +8,9 @@ import axios from 'axios'
 function Register() {
     const { useState } = React;
     const [columns, setColumns] = useState([
-        { title: 'Name', field: 'name' },
-        { title: 'Surname', field: 'surname', initialEditValue: 'initial edit value' },
-        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        {
-            title: 'Birth Place',
-            field: 'birthCity',
-            lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-        },
+        { title: 'Name', field: 'Name' },
+        { title: 'TokenNo', field: 'TokenNo'},
+        { title: 'MRNo', field: 'MRNo' },
     ]);
 
     const [data, setData] = useState([
