@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import MaterialTable from 'material-table'
 import { tableIcons } from './tableIcons';
 import DialogBox from './Dialog';
 import StepperForm from './stepper/StepperForm';
+import axios from 'axios'
 
 function Register() {
     const { useState } = React;
@@ -18,8 +19,8 @@ function Register() {
     ]);
 
     const [data, setData] = useState([
-        { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-        { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
+        // { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+        // { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
     ]);
     const [open, setOpen] = useState(false);
 
@@ -30,6 +31,14 @@ function Register() {
     const handleClose = () => {
         setOpen(false);
     };
+  useEffect(() => {
+      axios.get('http://localhost:4000/api/Register/')
+      .then(res => {
+          setData(res.data.data)
+        console.log(res.data.data)
+    })
+    .catch(err => console.log(err, 'err'))
+  }, [])
 
     return (
         <>
