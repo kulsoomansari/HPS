@@ -109,9 +109,9 @@ function Register({ handleNext, handleBack }) {
         IsZakat: "false",
         IsPAFEmp: "false",
         MonthlyConsLimit: 0,
-        ThumbImage: "",
+        // ThumbImage: "",
         NOY: "",
-        EmpID: "",
+        // EmpID: "",
         IsStaff: "false",
         CreateUser: "Admin",
         ModifyUser: "Admin",
@@ -230,13 +230,13 @@ function Register({ handleNext, handleBack }) {
         }
     }
     const handleSubmit = () => {
-            axios.post("http://localhost:4000/api/Register/add", Header)
-                .then(res => {
-                    console.log(res.data)
-                    handleNext();
-                })
-                .catch(err => console.log('error', err))
-        }
+        axios.post("http://localhost:4000/api/Register/add", Header)
+            .then(res => {
+                console.log(res.data)
+                handleNext();
+            })
+            .catch(err => console.log('error', err))
+    }
     return (
         <>
             <h2>Registration</h2>
@@ -272,18 +272,15 @@ function Register({ handleNext, handleBack }) {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid item xs={3}>
                             <KeyboardDatePicker
-                                disableToolbar
-                                variant="outlined"
-                                format="MM/dd/yyyy"
-                                margin="normal"
-                                id="date-picker-inline"
-                                // value={Header.RegistrationDate}
+                                autoOk
+                                variant="inline"
+                                inputVariant="outlined"
                                 label="Registration Date"
+                                id="RegistrationDate"
+                                format="MM/dd/yyyy"
                                 value={selectedDate}
-                                onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
+                                InputAdornmentProps={{ position: "start" }}
+                                onChange={date => handleDateChange(date)}
                             />
                         </Grid>
                     </MuiPickersUtilsProvider>
@@ -314,15 +311,15 @@ function Register({ handleNext, handleBack }) {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid item xs={3}>
                             <KeyboardDatePicker
-                                margin="normal"
-                                id="DOB"
+                                autoOk
+                                variant="inline"
+                                inputVariant="outlined"
                                 label="Date of birth"
+                                id="DOB"
                                 format="MM/dd/yyyy"
                                 value={selectedDate}
-                                onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
+                                InputAdornmentProps={{ position: "start" }}
+                                onChange={date => handleDateChange(date)}
                             />
                         </Grid>
                     </MuiPickersUtilsProvider>
@@ -542,13 +539,16 @@ function Register({ handleNext, handleBack }) {
                             />
                         </Grid> */}
                         <Grid item sm={3}>
-                            <TextField
+                            <NumberFormat
+                                format="#####"
+                                customInput={TextField}
                                 fullWidth
                                 id="NOY"
-                                value={Header.NOY}
                                 placeholder="NOY"
+                                label="NOY"
                                 onChange={(e) => setHeader({ ...Header, NOY: e.target.value })}
                                 variant="outlined"
+                                value={Header.NOY}
                             />
                         </Grid>
                     </Grid>
