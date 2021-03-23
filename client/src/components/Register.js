@@ -1,25 +1,21 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import MaterialTable from 'material-table'
 import { tableIcons } from './tableIcons';
 import DialogBox from './Dialog';
 import StepperForm from './stepper/StepperForm';
+import axios from 'axios'
 
 function Register() {
     const { useState } = React;
     const [columns, setColumns] = useState([
-        { title: 'Name', field: 'name' },
-        { title: 'Surname', field: 'surname', initialEditValue: 'initial edit value' },
-        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        {
-            title: 'Birth Place',
-            field: 'birthCity',
-            lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-        },
+        { title: 'Name', field: 'Name' },
+        { title: 'TokenNo', field: 'TokenNo'},
+        { title: 'MRNo', field: 'MRNo' },
     ]);
 
     const [data, setData] = useState([
-        { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-        { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
+        // { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+        // { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
     ]);
     const [open, setOpen] = useState(false);
 
@@ -30,7 +26,18 @@ function Register() {
     const handleClose = () => {
         setOpen(false);
     };
-
+  useEffect(() => {
+      axios.get('http://localhost:4000/api/Register/')
+      .then(res => {
+          setData(res.data.data)
+        console.log(res.data.data)
+    })
+    .catch(err => console.log(err, 'err'))
+  }, [])
+const handleDelete = ()=>{
+    // axios.delete('http://localhost:4000/api/Register/_id')
+    console.log('delete')
+}
     return (
         <>
         {/* <DialogBox open={open} handleClose={handleClose}/> */}
@@ -60,6 +67,8 @@ function Register() {
                 rowData => ({
                     icon: tableIcons.Delete,
                     tooltip: 'delete patient',
+                    // onClick: (event, rowData) => alert("You want to delete " + rowData.name)
+                    onClick: handleDelete,
                 })
             ]
             }

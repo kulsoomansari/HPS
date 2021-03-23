@@ -207,35 +207,39 @@ function Register({ handleNext, handleBack }) {
             setErr('Mobile is missing')
             return false;
         }
-        else if (Header.EmpID === '' || Header.EmpID === undefined || Header.EmpID === null) {
-            setErr('Employee ID is missing')
-            return false;
-        }
+        // else if (Header.EmpID === '' || Header.EmpID === undefined || Header.EmpID === null) {
+        //     setErr('Employee ID is missing')
+        //     return false;
+        // }
         else if (Header.NOY === '' || Header.Name === undefined || Header.Name === null) {
             setErr('NOY is missing')
             return false;
         }
-        else if (Header.IsPAFEmp === '' || Header.IsPAFEmp === undefined || Header.IsPAFEmp === null) {
-            setErr('PAF Employee is missing')
-            return false;
-        }
+        // else if (Header.IsPAFEmp === '' || Header.IsPAFEmp === undefined || Header.IsPAFEmp === null) {
+        //     setErr('PAF Employee is missing')
+        //     return false;
+        // }
 
-        else if (Header.IsRejected === '' || Header.IsRejected === undefined || Header.IsRejected === null) {
-            setErr('Rejection is missing')
-            return false;
-        }
+        // else if (Header.IsRejected === '' || Header.IsRejected === undefined || Header.IsRejected === null) {
+        //     setErr('Rejection is missing')
+        //     return false;
+        // }
 
         else {
             return true;
         }
     }
     const handleSubmit = () => {
-        axios.post("http://localhost:4000/api/Register/add", Header)
-            .then(res => {
-                console.log(res.data)
-                handleNext();
-            })
-            .catch(err => console.log('error', err))
+        let val = validate();
+        if (val === true) {
+            axios.post('http://localhost:4000/api/Register/add', Header)
+                .then(res => {
+                    console.log(res.data)
+                    handleNext()
+                })
+                .catch(err => console.log(err, 'err'))
+
+        }
     }
     return (
         <>

@@ -119,4 +119,7 @@ https://docs.google.com/document/d/1yE78HXydZA4s39nQLG42kKqFZT-Tau8u7S2sD4x-avY/
 
 https://github.com/Aemonkhan/HRS
 
+======================================QUIZ======================================
+http://final-quiz-navttc.surge.sh/
+
 

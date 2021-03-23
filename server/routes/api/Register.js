@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
         const register = await Reg.find()
         res.json({
             status: 200, success: true,
-             data: register
+            data: register
         })
     } catch {
         res.json({
@@ -20,17 +20,36 @@ router.post("/add", async (req, res) => {
     try {
         const register = await Reg.create(req.body)
         res.json({
-            status: 200, 
+            status: 200,
             success: true,
-             dbid: register._id, 
-             msg:"record created"
+            dbid: register._id,
+            msg: "record created"
         })
-    } catch(error){
+    } catch (error) {
         res.json({
-            status: 400, 
+            status: 400,
             success: false,
             error
         })
     }
 })
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params
+    try {
+        const del = await Reg.findByIdAndDelete(id)        
+        res.json({
+            status: 200,
+            success: true,
+            dbid: del._id,
+            msg: "record deleted"
+        })
+    } catch (error) {
+        res.json({
+            status: 400,
+            success: false,
+            error
+        })
+    }
+})
+
 module.exports = router

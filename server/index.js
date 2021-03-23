@@ -21,5 +21,5 @@ console.log("server is running at", PORT)
 })
 app.use('/api/Register', RegisterRoute)
 // app.use('/api/Services', ServicesRoute)
-// app.use('/api/Welfare', WelfareRoute)
+app.use('/api/Welfare', WelfareRoute)
 

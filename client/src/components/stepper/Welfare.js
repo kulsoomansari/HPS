@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, FormControl, TextField } from '@material-ui/core'
-import clsx from 'clsx';
+import { FormControl, TextField } from '@material-ui/core'
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -37,8 +36,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Welfare({ handleNext, handleBack }) {
     const classes = useStyles();
+    const [recID, setrecID] = useState('MR0000000012')
     const [Header, setHeader] = useState({
-        // MRNo: recID,
+        MRNo: recID,
         TokenNo: "",
         WelfareDate: new Date(),
         Profession: "",
@@ -60,6 +60,8 @@ function Welfare({ handleNext, handleBack }) {
         CreateUser: "Admin",
         ModifyUser: "Admin",
     })
+    const [err, setErr] = useState('')
+    const [open, setOpen] = useState(false)
     const [data, setData] = useState([]);
     const [state, setState] = useState({
         checkedA: false,
@@ -88,22 +90,38 @@ function Welfare({ handleNext, handleBack }) {
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
-
+const validate = () =>{
+    if (Header.TokenNo === '' || Header.TokenNo === undefined || Header.TokenNo === null) {
+        setErr('Token is missing')
+        setOpen(true)
+        return false;
+    }
+    else if (Header.WelfareDate === '' || Header.WelfareDate === undefined || Header.WelfareDate === null) {
+        setErr('WelfareDate is missing')
+        return false;
+    }
+    else {
+        return true;
+    }
+}
     const handleSubmit = () => {
         let payload = {
             Header,
             ItemTable
         };
         console.log(payload)
-        axios.post("http://localhost:4000/api/Welfare/add", Header)
-        .then(res => {
-            console.log(res.data)
-            handleNext();
-        })
-        .catch(err => console.log('error', err))    }
+            axios.post('http://localhost:4000/api/Welfare/add', Header)
+                .then(res => {
+                    console.log(res)
+                    handleNext()
+                })
+                .catch(err => console.log(err, 'err'))
+
+      }
 
     return (
         <>
+                    <h2>Welfare</h2>
             <GlobalHeader handleSubmit={handleSubmit} handleBack={handleBack} />
             <form onSubmit={handleSubmit}>
                 <div className={classes.root}>
